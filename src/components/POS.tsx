@@ -70,7 +70,7 @@ const POS: React.FC = () => {
   const [commands, setCommands] = useState<string>("");
   const [receipt, setReceipt] = useState<ReceiptItem[]>([]);
   const [commandLog, setCommandLog] = useState<string[]>([]);
-  const [pageSize, setPageSize] = useState<string>("80mm");
+  const [pageSize, setPageSize] = useState<"58mm" | "80mm" | "112mm">("80mm");
   const receiptRef = useRef<HTMLDivElement>(null);
 
   const printSound = new Audio('/sounds/print.mp3');
@@ -116,7 +116,7 @@ ESC d 3`;
           parsedReceipt.push({ type: "text", text: "\n", styles: { ...currentStyles } });
           break;
         case "ESC":
-          handleESCCommands(args, currentStyles, newCommandLog, parsedReceipt);
+          handleESCCommands(args, currentStyles, newCommandLog);
           break;
         case "GS":
           handleGSCommands(args, parsedReceipt, currentStyles, newCommandLog);
@@ -133,7 +133,7 @@ ESC d 3`;
     setCommandLog(newCommandLog);
   };
 
-  const handleESCCommands = (args: string[], currentStyles: React.CSSProperties, newCommandLog: string[], parsedReceipt: ReceiptItem[]) => {
+  const handleESCCommands = (args: string[], currentStyles: React.CSSProperties, newCommandLog: string[]) => {
     switch (args[0]) {
       case "@":
         newCommandLog.push("Printer Initialized");
@@ -207,7 +207,7 @@ ESC d 3`;
   }, []);
 
   const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setPageSize(event.target.value);
+    setPageSize(event.target.value as "58mm" | "80mm" | "112mm");
   };
 
   const pageWidths = {
